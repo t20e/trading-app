@@ -7,7 +7,9 @@ const Login = ({ submitForm, changeLayout, formErrors }) => {
     let [password, setPassword] = useState("");
     const loginUser = (e) => {
         e.preventDefault()
+        // TODO
         let formInfo = { email, password };
+        submitForm(formInfo, "api/users/login")
     }
 
     return (

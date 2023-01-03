@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Login from './Login';
 import Reg from './Reg'
 import btnClickAudio from '../../miscellaneous/btnClickAudio.mp3'
+import axios from 'axios';
 
 const Landing_page = () => {
     const logoRef = useRef(null)
@@ -28,8 +29,16 @@ const Landing_page = () => {
         }, 1500)
     }, []);
 
-    const submitForm = (data) => {
+    const submitForm = (data, url) => {
         // TODO
+        console.log(data)
+        axios.post(`http://localhost:8000/${url}`, data, { withCredentials: true })
+            .then(res => {
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
     const changeLayout = (path) => {
         audio.play()

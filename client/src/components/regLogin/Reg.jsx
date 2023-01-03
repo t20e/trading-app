@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styles from '../../styles/regLogin.css'
-import {err_exclamationPoint} from '../../miscellaneous/svgIcons'
+import { err_exclamationPoint } from '../../miscellaneous/svgIcons'
 // TODO move all the input validations to utils
+// TODO make it check if theres a email address with that email as user types it in
 const inputsInOrder = ['firstName', 'lastName', 'age_pfp', 'email', 'password', 'confirmPassword']
 const Reg = ({ submitForm, changeLayout }) => {
     const [newUser, setNewUser] = useState({
@@ -31,6 +32,15 @@ const Reg = ({ submitForm, changeLayout }) => {
         }
         // TODO create user
         console.log('all input entered')
+        const formData = new FormData()
+        formData.append("first_name", newUser.firstName);
+        formData.append("last_name", newUser.lastName);
+        formData.append("age", newUser.age);
+        formData.append("email", newUser.email);
+        formData.append("password", newUser.password);
+        formData.append("confirmPassword", newUser.confirmPassword);
+        formData.append("pfp", newUser.profilePic);
+        submitForm(formData, 'users/register/')
     }
 
     const goBackInput = (e) => {
