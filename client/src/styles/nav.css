@@ -1,0 +1,95 @@
+nav {
+    flex: 1;
+    padding: 2em 0;
+    transition: 1s ease;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+nav ul li:last-child {
+    /* push the last item to the bottom */
+    margin-top: auto;
+}
+
+nav:hover {
+    flex: 3;
+    padding-left: 2em;
+    display: flex;
+
+}
+
+nav:hover ul {
+    align-items: flex-start;
+}
+
+nav:hover span {
+    display: block;
+}
+
+nav ul li button {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+nav span {
+    display: none;
+    margin-left: 1em;
+}
+
+#pfp {
+    height: 3em;
+    border-radius: .7em;
+    margin-bottom: 2em;
+}
+
+nav button {
+    margin-top: .5em;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-right: 1em;
+}
+
+nav button:hover {
+    color: red;
+}
+
+nav svg {
+    height: 1.5em;
+}
+
+
+
+
+/* papers svg  */
+nav li:nth-child(2):hover .changeColorSvg {
+    stroke: red;
+}
+
+nav li:nth-child(2):hover .fileColorSvg {
+    fill: red;
+}
+
+
+/* reset svg */
+nav li:nth-child(3):hover .fileColorSvg {
+    fill: red
+}
+
+nav li:nth-child(3):hover .changeColorSvg {
+    stroke: red;
+}
+
+/* logout svg */
+nav li:nth-child(4):hover .changeColorSvg {
+    background-color: sandybrown;
+    stroke: red;
+}

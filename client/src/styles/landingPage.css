@@ -1,0 +1,79 @@
+@keyframes animateLandingPage {
+    0% {
+        top: -50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    90% {
+        top: 60%;
+        left: 50%;
+    }
+
+    100% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+
+#spline {
+    position: absolute;
+    z-index: -10;
+}
+
+#landingPage__cont {
+    position: absolute;
+    animation-name: animateLandingPage;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+}
+
+#landingPage__cont>* {
+    color: white;
+}
+
+.landingPage__brandName {
+    display: none;
+}
+
+.landingPage__logoCont {
+    text-align: center;
+    margin-left: 1em;
+}
+
+#landingPage__logo {
+    height: 40px;
+    width: auto;
+}
+
+.landingPage__logoCont h1 {
+    color: #3B3B58;
+}
+
+.landing_page_btns {
+    margin-top: 1.5em;
+    display: none;
+    justify-content: center;
+}
+
+.landing_page_btns button {
+    cursor: pointer;
+    color: white;
+    /* background-color: #DF9ED2;
+    background-color: #dc5a93; */
+    background-color: #3B3B58;
+    margin: 0 2rem;
+    border-radius: .3em;
+    padding: .3em 1.5em;
+    border: none;
+    outline: none;
+}
+
+.reg{
+    display: none;
+}
+.login{
+    display: none;
+}

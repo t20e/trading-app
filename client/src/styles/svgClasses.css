@@ -1,0 +1,84 @@
+.arrowSelectorSvg {
+    fill: none;
+    stroke: white;
+    stroke-width: 60;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10;
+}
+
+.downArrow0 {
+    fill: none;
+    stroke: #AC3931;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+}
+
+.downArrow1 {
+    fill: #AC3931;
+}
+
+.greenArrow0 {
+    fill: none;
+    stroke: #115538;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+}
+
+.greenArrow1 {
+    fill: #115538;
+}
+
+
+.papersIcon0 {
+    fill: none;
+    stroke: #444446;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+}
+
+.papersIcon1 {
+    fill: #444446;
+}
+
+.papersIcon2 {
+    fill: none;
+    stroke: #444446;
+    stroke-miterlimit: 10;
+}
+
+.logoutIcon0 {
+    fill: none;
+    stroke: #344153;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+}
+
+.logoutIcon1 {
+    fill: none;
+    stroke: #344153;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.resetIcon0 {
+    fill: none;
+    stroke: #344153;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.resetIcon1 {
+    fill: #080808;
+}
+
+.err_exclamationPoint0 {
+    fill: #FFFFFF;
+}
+
+.err_red_exclamationPoint {
+    fill: #FF0000;
+}
