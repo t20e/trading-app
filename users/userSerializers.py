@@ -7,7 +7,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # for all fields
-        fields = '__all__'
-        # or
-        # fields = ['id', 'first_name', 'last_name', 'email', 'pfp_id',
-        #           'pw_hash', 'created_at', 'updated_at', 'age', 'balance']
+        # fields = '__all__'
+        # or to specify fields this one excludes password hash
+        fields = ['id', 'first_name', 'last_name', 'email', 'pfp_id','created_at', 'updated_at', 'age', 'balance']

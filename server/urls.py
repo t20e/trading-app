@@ -24,6 +24,6 @@ urlpatterns = [
     # path('hello', views.say_hello),
     # path('authUser/', include('authUser.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
-    path('users/', include('users.urls')),
+    path('api/users/', include('users.urls')),
     # path('trades/', include('apps.trades.urls', namespace="trades"))
 ]
