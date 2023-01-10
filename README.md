@@ -2,23 +2,37 @@
 
 
 
+TODO:
+    user reg account
+        allow user photos if they decline then
+            :add a photo for user
+        : log out
+    user login
+    user trade
+        : buy and sell
+        : user can see a history of all trades and  open trades
+
+
+
+
 mysql schema:
     user:
-        id:√
-        first_name:√
-        last_name:√
+        id:
+        first_name:
+        last_name:
         all_trades: []
-        age:√
-        email:√
-        password:√
-        pfp_id:√
-        balance:√
+        age:
+        email:
+        password:
+        pfp_id:
+        balance:
 
     trade:
-        id:√
-        user_id:√
-        currency_pair:√
-        price_at_trade:√
-        prediction:√
-        expires_at: 2 mins√
-        profit:√
+        id:
+        user_id:
+        currency_pair:
+        price:
+        prediction:
+        expires_at: 2 mins
+        timeStamp:
+        profit:

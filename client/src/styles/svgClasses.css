@@ -82,14 +82,3 @@
 .err_red_exclamationPoint {
     fill: #FF0000;
 }
-
-.noPfpSvg {
-    fill: none;
-    stroke: #fff;
-    stroke-miterlimit: 10;
-    stroke-width: 6px;
-}
-
-.noPfpSvg2 {
-    fill: #a2a2a2;
-}

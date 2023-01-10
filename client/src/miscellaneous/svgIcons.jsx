@@ -80,9 +80,3 @@ export const err_red_exclamationPoint = <svg xmlns="http://www.w3.org/2000/svg"
     <path className="err_red_exclamationPoint" d="M0,27.5c0-1.1,0.9-2.1,2.1-2.1c1.1,0,2.1,1,2.1,2.1s-1,2.1-2.1,2.1C0.9,29.5,0,28.6,0,27.5z M1.5,20.9
 c-0.2-2.6-0.3-7.5-0.3-12.4V2.1H3v6.4c0,4.9-0.1,9.8-0.3,12.4C2.6,21,1.5,21,1.5,20.9z"/>
 </svg>
-
-export const no_user_pfp = <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 225 225"><rect class="noPfpSvg2" width="225" height="225" />
-    <path class="noPfpSvg" d="M116.24,123h-7.47c-37.15,0-67.26,23.74-67.26,63.5h0s142,0,142,0h0c0-39.76-30.11-63.5-67.26-63.5Z" />
-    <circle class="noPfpSvg" cx="112.5" cy="73.5" r="34.5" />
-</svg>

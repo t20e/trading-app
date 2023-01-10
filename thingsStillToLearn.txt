@@ -1,0 +1,14 @@
+Things still to learn
+    :sqlite
+    django side
+        :many to many
+        :many to one
+        :and other relationships
+        :sessions
+        :forms
+        :whats __init__.py for in apps
+        :admin controlls
+        :how to pass data to urls like user id and collect it in django
+        :how to extend html layouts
+
+// other stuff not Relevant 
