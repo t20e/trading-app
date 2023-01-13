@@ -1,10 +1,14 @@
 .arrowSelectorSvg {
-    fill: none;
-    stroke: white;
+    /* fill: none; */
+    fill:#FFFFFF;
+    /* stroke: white; */
     stroke-width: 60;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-miterlimit: 10;
+    /* rotate an svg item */
+    /* transform: rotate(180deg);
+    transform-origin: 50% 50%; */
 }
 
 .downArrow0 {
@@ -81,4 +85,15 @@
 
 .err_red_exclamationPoint {
     fill: #FF0000;
+}
+
+.noPfpSvg {
+    fill: none;
+    stroke: #fff;
+    stroke-miterlimit: 10;
+    stroke-width: 6px;
+}
+
+.noPfpSvg2 {
+    fill: #a2a2a2;
 }

@@ -17,6 +17,7 @@
 html,
 body {
   background-color: #F7CFF6;
+  overflow: hidden;
 }
 
 ::placeholder {
@@ -81,7 +82,7 @@ button{
     width: 30rem;
     display: none;
   }
-
+  
   90% {
     width: 30rem;
     display: block;
@@ -96,18 +97,13 @@ button{
 .gitLink {
   position: absolute;
   z-index: 100;
-  top: 94%;
-  left: 20%;
-  width: auto;
+  top: 50%;
+  left: 2%;
   display: flex;
   align-items: center;
 }
 
 .gitLinkAlert {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  background-color: transparent;
   user-select: none;
 }
 
@@ -121,7 +117,7 @@ button{
   border-radius: 1em 0 0 1em;
   margin-right: -1.2rem;
   animation-name: growAlert;
-  animation-duration: 15s;
+  animation-duration: 5s;
   animation-fill-mode: forwards;
   overflow: hidden;
   white-space: nowrap;

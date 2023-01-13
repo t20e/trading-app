@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styles from '../../styles/regLogin.css'
-import {err_exclamationPoint} from '../../miscellaneous/svgIcons'
-// TODO move all the input validations to utils
+import { err_exclamationPoint } from '../../miscellaneous/svgIcons'
+
+
+// TODO make it check if theres a email address with that email as user types it in
 const inputsInOrder = ['firstName', 'lastName', 'age_pfp', 'email', 'password', 'confirmPassword']
-const Reg = ({ submitForm, changeLayout }) => {
+const onlyLettersRegex = new RegExp(/^[A-Za-z]+$/)
+const imgRegex = new RegExp("[^\\s]+(.*?)\\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$")
+const emailRegex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+
+
+const Reg = ({ submitForm, changeLayout, vibrateErr, changeErrVibrate }) => {
     const [newUser, setNewUser] = useState({
         firstName: "",
         lastName: "",
@@ -18,19 +25,25 @@ const Reg = ({ submitForm, changeLayout }) => {
     const [renderImgErr, setRenderImgErr] = useState(null)
     const [formErrors, setFormErrors] = useState({})
 
-    const onlyLettersRegex = new RegExp(/^[A-Za-z]+$/)
-    const imgRegex = new RegExp("[^\\s]+(.*?)\\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$")
-    const emailRegex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
     const regUser = (e) => {
         e.preventDefault()
-        if (inputsInOrder.indexOf(currInput) !== inputsInOrder.length - 1) {
+        if (Object.keys(formErrors).length > 0) {
+            changeErrVibrate()
+            return
+        } else if (inputsInOrder.indexOf(currInput) !== inputsInOrder.length - 1) {
             setCurrInput(inputsInOrder[inputsInOrder.indexOf(currInput) + 1])
             return;
-        } else if (currInput !== 'confirmPassword') {
-            return
         }
-        // TODO create user
         console.log('all input entered')
+        const formData = new FormData()
+        formData.append("first_name", newUser.firstName);
+        formData.append("last_name", newUser.lastName);
+        formData.append("age", newUser.age);
+        formData.append("email", newUser.email);
+        formData.append("password", newUser.password);
+        formData.append("confirmPassword", newUser.confirmPassword);
+        formData.append("pfp", newUser.profilePic);
+        submitForm(formData, 'api/users/register/')
     }
 
     const goBackInput = (e) => {
@@ -42,10 +55,11 @@ const Reg = ({ submitForm, changeLayout }) => {
         name = name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase()
         let obj = {}
         obj[name] = ''
-        console.log(onlyLettersRegex.test(newUser[e.target.name]))
+        // console.log(onlyLettersRegex.test(newUser[e.target.name]))
         if (
-            newUser[e.target.name].length < 2 ||
-            newUser[e.target.name].length > 32
+            e.target.value.length < 3 ||
+            e.target.value.length > 32 ||
+            e.target.value.length === 0
         ) {
             obj[e.target.name] = `${name} must be between 3 and 32 characters`
             setFormErrors(obj)
@@ -66,7 +80,7 @@ const Reg = ({ submitForm, changeLayout }) => {
                 checkTextInput(e)
                 break;
             case 'age':
-                if (Number(e.target.value) < 18 || Number(e.target.value) > 150) {
+                if (Number(e.target.value) < 18 || Number(e.target.value) > 150 || e.target.value.length === 0) {
                     setFormErrors({ 'age_pfp': 'age must be between 18 and 150' })
                 } else {
                     setFormErrors({})
@@ -158,7 +172,6 @@ const Reg = ({ submitForm, changeLayout }) => {
                         <input autoFocus type="number" className='reg__age_input' name='age' placeholder='age' onChange={(e) => editInputs(e)} value={newUser.age} />
                     </div>
                     : ''}
-
                 {currInput === 'email' ?
                     <input autoFocus type="text" name='email' placeholder='email' onChange={(e) => editInputs(e)}
                         className='currInput'
@@ -177,7 +190,7 @@ const Reg = ({ submitForm, changeLayout }) => {
                     />
                     : ''}
                 {formErrors[currInput] ?
-                    <div className='reg__err'>
+                    <div className={`reg__err ${vibrateErr}`}>
                         <p >{formErrors[currInput]}</p>
                         {/* <img src="https://portfolio-avis-s3.s3.amazonaws.com/app/icons/err_exclamationPoint.svg" alt="" /> */}
                         {err_exclamationPoint}
@@ -189,7 +202,7 @@ const Reg = ({ submitForm, changeLayout }) => {
                 {currInput !== 'firstName' ?
                     <button className='goBackBtn' onClick={goBackInput}>go back?</button>
                     : ''}
-                <button className='goBackBtn' onClick={() => changeLayout('main')}>go to start?</button>
+                <button className='goBackBtn' onClick={(e) => changeLayout('main', e)}>go to start?</button>
             </div>
             {newUser.firstName !== "" ?
                 <p className='footerP'>*press <b>enter</b> to continue</p>

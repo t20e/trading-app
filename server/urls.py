@@ -25,5 +25,6 @@ urlpatterns = [
     # path('authUser/', include('authUser.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
     path('api/users/', include('users.urls')),
+    path('api/trades/', include('trades.urls')),
     # path('trades/', include('apps.trades.urls', namespace="trades"))
 ]

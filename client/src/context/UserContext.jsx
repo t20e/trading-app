@@ -1,10 +1,13 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useMemo } from 'react';
+
 export const UserContext = createContext()
 
 export const UserProvider = (props) => {
-    const [userContext, setUserContext] = useState(null)
+    const [loggedUser, setLoggedUser] = useState(null)
+    const userValue = useMemo(() => ({ loggedUser, setLoggedUser }), [loggedUser, setLoggedUser])
+
     return (
-        <UserContext.Provider value={{ userContext, setUserContext }}>
+        <UserContext.Provider value={userValue}>
             {props.children}
         </UserContext.Provider>
     )
