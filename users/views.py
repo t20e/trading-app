@@ -12,9 +12,11 @@ import jwt
 import datetime
 import environ
 from rest_framework.exceptions import AuthenticationFailed
+from trades.views import getHistoricalCurrencyPrice
 
 env = environ.Env()
 environ.Env.read_env()
+# TODO on login or register or getLogged user return the api currency data with base
 
 
 @api_view(['POST'])
@@ -44,17 +46,25 @@ def register(request):
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
             'iat': datetime.datetime.utcnow()
         }
-        userToken = jwt.encode(payload, env(
-            'APP_SECRET_KEY'), algorithm='HS256')
+        userToken = jwt.encode(payload,
+                               env('APP_SECRET_KEY'),
+                               algorithm='HS256')
         # no errors # only set many to True if theres more than one object being serialized
-        print('\n', userToken)
+        # print('\n', userToken)
         serializer = UserSerializer(res, many=False)
+        currencyData = getHistoricalCurrencyPrice(res.currCurrency)
         res = Response()
         res.set_cookie(key='userToken', value=userToken, httponly=True)
-        res.data = {'body': serializer.data,
-                    'errors': False}
+        res.data = {
+            'body': {
+                "user": serializer.data,
+                "currencyData": currencyData,
+            },
+            'errors': False
+        }
         return res
     return Response({'body': res, 'errors': True}, status=400)
+
 
 #  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksImV4cCI6MTY3NTkwOTAxMywiaWF0IjoxNjczMzE3MDEzfQ.UVFwTz8jzIuQ3ZSxZXgkO4-7IptKI35SCBL6JfaAulY
 
@@ -67,24 +77,28 @@ def login(request):
         'email': request.POST.get('email'),
         'password': request.POST.get('password')
     }
-    isValid, res = UserManager.loginUser(data)
+    isValid, res = User.objects.loginUser(data)
+    if not isValid:
+        return Response({'errors': True, 'loginFail': True, 'msg': res})
     # SEND a new JWT token
-    # return Response({'errors': True, 'loginFail': True, 'msg': res})
-
-    # payload = {
-    #     'id': res.id,
-    #     'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
-    #     'iat': datetime.datetime.utcnow()
-    # }
-    # userToken = jwt.encode(payload, env(
-    #     'APP_SECRET_KEY'), algorithm='HS256')
-    # serializer = UserSerializer(res)
-    # res = Response()
-    # res.set_cookie(key='userToken', value=userToken, httponly=True)
-    # res.data = {'body': serializer.data,
-    #             'errors': False}
-    print(res.first_name)
-    return Response('hi')
+    payload = {
+        'id': res.id,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
+        'iat': datetime.datetime.utcnow()
+    }
+    userToken = jwt.encode(payload, env('APP_SECRET_KEY'), algorithm='HS256')
+    serializer = UserSerializer(res)
+    currencyData = getHistoricalCurrencyPrice(res.currCurrency)
+    res = Response()
+    res.set_cookie(key='userToken', value=userToken, httponly=True)
+    res.data = {
+        'body': {
+            "user": serializer.data,
+            "currencyData": currencyData,
+        },
+        'errors': False
+    }
+    return res
 
 
 @api_view(['GET'])
@@ -93,23 +107,49 @@ def getLoggedUser(request):
     if token == None:
         return Response('Unauthenticated token!', status=401)
     try:
-        payload = jwt.decode(token,  env(
-            'APP_SECRET_KEY'), algorithms=['HS256'])
-    except jwt.ExpiredSignatureError:
-        raise AuthenticationFailed('Unauthenticated token!')
+        payload = jwt.decode(token,
+                             env('APP_SECRET_KEY'),
+                             algorithms=['HS256'])
+    except jwt.ExpiredSignatureError or jwt.exceptions.InvalidSignatureError:
+        # raise AuthenticationFailed('Unauthenticated token!')
+        return Response('Unauthenticated token!', status=401)
     user = User.objects.filter(id=payload['id']).first()
+    currencyData = getHistoricalCurrencyPrice(user.currCurrency)
     serializer = UserSerializer(user)
-    return Response(serializer.data)
+    res = Response()
+    res.data = {
+        'body': {
+            "hi":"hi",
+            "user": serializer.data,
+            "currencyData": currencyData,
+        },
+        'errors': False
+    }
+    return res
 
 
 @api_view(['POST'])
 def logout(request):
-    res = Response()
-    res.delete_cookie('userToken')
+    print('Logout')
+    # res = Response()
+    # res.delete_cookie('userToken')
+    # return res
+    res = HttpResponse()
+    res.delete_cookie(key='userToken')
     res.data = {
         'msg': 'logged out',
     }
     return res
+
+@api_view(['GET'])
+def resetNetWorth(request):
+    user_id = request.query_params.get('id')
+    user = User.objects.get(id=user_id)
+    user.balance = 1500
+    print(user.balance)
+    print(user_id, 'user id')
+    user.save()
+    return Response('successfully reset net worth', status=200)
 
 # @api_view(['GET'])
 # def example(request):
@@ -127,8 +167,7 @@ def logout(request):
 def upload_img_AWS_s3(pfp):
     if pfp and allowed_files(pfp.name):
         pfp_id = str(uuid.uuid1()) + '_' + pfp.name
-        default_storage.save(
-            f"users/{pfp_id}", pfp)
+        default_storage.save(f"users/{pfp_id}", pfp)
         return pfp_id
     return Response({'errors': 'file type not allowed'})
 

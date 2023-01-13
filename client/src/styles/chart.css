@@ -7,45 +7,70 @@
 .currencySelector__block {
     position: absolute;
     top: 3em;
-    left: 10em;
-    height: 2.5em;
-    width: 10em;
+    left: 11em;
+    height: auto;
+    width: auto;
     border-radius: .5em;
-    background-color: seagreen;
     color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.currencySelector__block h3 {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    text-decoration: underline;
-}
-
-
-.currencySelector__block svg {
-    height: .5em;
-
 }
 
 .currencySelector__block ul {
-    width: 100%;
-    display: none;
-    cursor: pointer;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
-.currencySelector__block:hover {
-    height: auto;
+.currencySelector__block svg {
+    height: .4em;
+}
+
+.currCurrency {
+    background-color: seagreen;
     padding: .5em;
-}
-.currencySelector__block:hover   h3{
-    margin-bottom: .5em;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    border-radius: .5em;
 }
 
-.currencySelector__block:hover ul {
-    display: inline;
+.currencySelector__block ul li:first-child p {
+    margin: 0 .5em;
+    font-size: smaller;
+}
+
+.currencySelector__block ul div {
+    padding: .5em;
+    max-width: 7em;
+    border-radius: .5em;
+    background-color: seagreen;
+    margin-top: .5em;
+    display: none;
+    align-self: flex-end;
+}
+
+.currencySelector__block li {
+    cursor: pointer;
+}
+
+.currencySelector__block ul div li {
+    margin-top: .2em;
+}
+.currencySelector__block ul div li:hover {
+    font-size: small;
+    color: red;
+}
+
+.currencySelector__block ul div li:first-child {
+    font-size: xx-small;
+    white-space: nowrap;
+    font-style: italic;
+}
+
+.currencySelector__block ul:hover div {
+    display: block;
+}
+
+.currencySelector__block ul:hover .rotateArr {
+    /* rotate an svg item */
+    transform: rotate(180deg);
+    transform-origin: 50% 50%;
 }

@@ -27,3 +27,4 @@ client/node_modules
 client/src/miscellaneous/btnClickAudio.mp3
 client/src/miscellaneous/quick_swhooshing.mp3
 server/.env
+.env

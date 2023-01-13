@@ -8,8 +8,7 @@ const GitLink = () => {
                     <h4>find a bug? or have questions about this app? let me know!</h4>
                 </div>
             </div>
-            {/* TODO change this link */}
-            <a href="https://github.com/t20e/message_app">
+            <a target="_blank" href="https://github.com/t20e/trading-app">
                 <img id="linkImg" src={"https://portfolio-avis-s3.s3.amazonaws.com/app/icons/gitCodeLink_img-01.png"} alt="link img" />
             </a>
         </div>

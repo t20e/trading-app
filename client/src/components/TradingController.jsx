@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import { err_red_exclamationPoint } from '../miscellaneous/svgIcons'
+import { UserContext } from '../context/UserContext'
 
 const numsOnly = new RegExp(/^[0-9]*$/)
 
 const TradingController = (props) => {
+    const { loggedUser, setLoggedUser } = useContext(UserContext)
+
     const [investAmount, setInvestAmount] = useState(500)
     const [errorMsg, setErrorMsg] = useState(false)
 
@@ -45,7 +48,6 @@ const TradingController = (props) => {
     }
     const changeAmount = (e) => {
         e.preventDefault()
-        // TODO make sure only numbers are entered
         let amountRemovedSign = e.target.value.substring(1)
         const checkInput = checkInvestInputText(amountRemovedSign)
         if (checkInput) return;
@@ -53,7 +55,7 @@ const TradingController = (props) => {
     }
     return (
         <>
-            <h1> Balance: $10,100</h1>
+            <h1> Balance: ${loggedUser.balance}</h1>
             <div className={`tradeAmount__cont ${errorMsg ? 'increaseWidth' : ''}`}>
                 <p>Amount</p>
                 <input type="text" onChange={changeAmount} value={`$${investAmount}`} />
