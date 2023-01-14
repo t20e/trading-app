@@ -9,9 +9,12 @@ import TradeChart from './TradeChart'
 import { UserContext } from '../context/UserContext'
 import axios from 'axios';
 import { CurrencyContext } from '../context/CurrencyContext';
+import { AllTradesContext} from '../context/AllTradesContext';
 
 const Dashboard = () => {
-    const { currencyPair, setCurrencyPair } = useContext(CurrencyContext)
+    const { currencyPairPrices, setCurrencyPairPrices } = useContext(CurrencyContext)
+    const { allTrades, setAllTrades } = useContext(AllTradesContext)
+
     const redirect = useNavigate()
     const { loggedUser, setLoggedUser } = useContext(UserContext)
     useEffect(() => {
@@ -19,9 +22,10 @@ const Dashboard = () => {
             console.log('rendering dashboard useEffect to get user with local storage')
             axios.get('http://localhost:8000/api/users/getLoggedUser/', { withCredentials: true })
                 .then(res => {
-                    // console.log('logged user from token', res.data)
+                    console.log('logged user from token', res.data)
                     setLoggedUser(res.data.body.user)
-                    setCurrencyPair(res.data.body.currencyData)
+                    setCurrencyPairPrices(res.data.body.currencyData)
+                    setAllTrades(res.data.body.allTrades)
                 })
                 .catch(err => {
                     console.log(err)
@@ -81,7 +85,7 @@ const Dashboard = () => {
                 </ul>
             </nav>
             <div id='dash__colTwo'>
-                {loggedUser !== null ? currencyPair !== null ?
+                {loggedUser !== null ? currencyPairPrices !== null ?
                     <TradeChart />
                     : null : null}
             </div>

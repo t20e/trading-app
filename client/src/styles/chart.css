@@ -54,7 +54,7 @@
 .currencySelector__block ul div li {
     margin-top: .2em;
 }
-.currencySelector__block ul div li:hover {
+.currencySelector__block ul div li:hover:not(:first-child) {
     font-size: small;
     color: red;
 }

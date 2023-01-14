@@ -15,7 +15,7 @@
 }
 
 .tradingUiCont {
-    flex: 1;
+    height: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -62,8 +62,9 @@
     border: 2px solid black;
     border-radius: 5px;
 }
-.increaseWidth{
-    max-width: 25em ;
+
+.increaseWidth {
+    max-width: 25em;
 }
 
 .tradeAmount__cont p {
@@ -75,7 +76,8 @@
     transform: translate(-50%, -10%);
     background-color: #F7CFF6;
 }
-.tradeBlock__alert{
+
+.tradeBlock__alert {
     white-space: nowrap;
     height: 2.2em;
     width: 100%;
@@ -85,7 +87,8 @@
     justify-content: space-evenly;
     color: white;
 }
-.tradeBlock__alert svg{
+
+.tradeBlock__alert svg {
     background-color: white;
     height: 1.7em;
     width: 1.7em;
@@ -93,6 +96,7 @@
     padding: .2em;
     border-radius: 20px;
 }
+
 .tradeAmount__cont input {
     text-align: center;
     width: 100%;
@@ -123,9 +127,10 @@
     border: none;
     width: 40%;
 }
-.tradeBlock__btn button:hover{
+
+.tradeBlock__btn button:hover {
     background-color: red;
-} 
+}
 
 .tradeBlock__middle {
     border-left: 2px solid black;
@@ -138,15 +143,18 @@
     justify-items: center;
 }
 
-.pastTradesCont {
-    flex: 1;
+.viewTradesCont {
+    height: 50%;
     border-top: 2px solid black;
     display: flex;
     flex-direction: column;
 }
 
 .pastTrades__rowOne {
-    flex: .7;
+    /* flex: 1; */
+    min-height: 10%;
+    max-height: 10%;
+    /* margin: .5em 0; */
 
 }
 
@@ -177,11 +185,18 @@
 }
 
 .pastTrades__rowTwo {
-    flex: 5;
     /* border-top: 1px solid black; */
-    ;
+    height: 90%;
+    margin-top: auto;
+    overflow: scroll;
+    overflow-x: hidden;
 }
-
+.pastTrades__headers{
+    position: sticky;
+    top: 0em;
+    /* TODO set a background similar to background */
+    background-color: white;
+}
 .pastTrades__headers h5 {
     text-decoration: underline;
 }

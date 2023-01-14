@@ -6,4 +6,5 @@ from . import views
 urlpatterns = [
     path('getCurrencyPairPrice/', views.getCurrencyPairPrice),
     path('getCurrPairPrice/', views.getCurrPairPrice),
+    path('trade/', views.trade)
 ]

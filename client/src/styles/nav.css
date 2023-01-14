@@ -10,6 +10,9 @@ nav ul {
     align-items: center;
     height: 100%;
 }
+nav ul li:nth-child(3){
+    margin-top: 2em;
+}
 
 nav ul li:last-child {
     /* push the last item to the bottom */

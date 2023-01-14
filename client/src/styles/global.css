@@ -40,6 +40,36 @@ body {
   font-size: larger;
 }
 
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.2em;
+  position: relative;
+  left: 2em;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: silver;
+  border-radius: 20em;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  width: 0.4em;
+  background: blue;
+}
+
+
+
 /* hide input arrows  */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

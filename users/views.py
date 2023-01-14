@@ -13,6 +13,7 @@ import datetime
 import environ
 from rest_framework.exceptions import AuthenticationFailed
 from trades.views import getHistoricalCurrencyPrice
+from trades.tradeSerializers import TradeSerializer
 
 env = environ.Env()
 environ.Env.read_env()
@@ -38,7 +39,6 @@ def register(request):
         'age': request.POST.get('age'),
         'confirmPassword': request.POST.get('confirmPassword')
     }
-
     isValid, res = UserManager.validate_and_create_user(data)
     if isValid:
         payload = {
@@ -51,13 +51,16 @@ def register(request):
                                algorithm='HS256')
         # no errors # only set many to True if theres more than one object being serialized
         # print('\n', userToken)
+        allTrades = res.trades
+        allTrades = TradeSerializer(allTrades, many=True)
         serializer = UserSerializer(res, many=False)
-        currencyData = getHistoricalCurrencyPrice(res.currCurrency)
+        currencyData = getHistoricalCurrencyPrice(res.curr_currency)
         res = Response()
         res.set_cookie(key='userToken', value=userToken, httponly=True)
         res.data = {
             'body': {
                 "user": serializer.data,
+                "allTrades": allTrades.data,
                 "currencyData": currencyData,
             },
             'errors': False
@@ -87,13 +90,16 @@ def login(request):
         'iat': datetime.datetime.utcnow()
     }
     userToken = jwt.encode(payload, env('APP_SECRET_KEY'), algorithm='HS256')
+    allTrades = res.trades
+    allTrades = TradeSerializer(allTrades, many=True)
     serializer = UserSerializer(res)
-    currencyData = getHistoricalCurrencyPrice(res.currCurrency)
+    currencyData = getHistoricalCurrencyPrice(res.curr_currency)
     res = Response()
     res.set_cookie(key='userToken', value=userToken, httponly=True)
     res.data = {
         'body': {
             "user": serializer.data,
+            "allTrades": allTrades.data,
             "currencyData": currencyData,
         },
         'errors': False
@@ -113,13 +119,16 @@ def getLoggedUser(request):
     except jwt.ExpiredSignatureError or jwt.exceptions.InvalidSignatureError:
         # raise AuthenticationFailed('Unauthenticated token!')
         return Response('Unauthenticated token!', status=401)
+    print('payload\n\n\n\n', payload)
     user = User.objects.filter(id=payload['id']).first()
-    currencyData = getHistoricalCurrencyPrice(user.currCurrency)
+    currencyData = getHistoricalCurrencyPrice(user.curr_currency)
     serializer = UserSerializer(user)
+    allTrades = user.trades
+    allTrades = TradeSerializer(allTrades, many=True)
     res = Response()
     res.data = {
         'body': {
-            "hi":"hi",
+            "allTrades": allTrades.data,
             "user": serializer.data,
             "currencyData": currencyData,
         },
@@ -141,15 +150,17 @@ def logout(request):
     }
     return res
 
+
 @api_view(['GET'])
 def resetNetWorth(request):
     user_id = request.query_params.get('id')
     user = User.objects.get(id=user_id)
-    user.balance = 1500
+    user.balance = 15000
     print(user.balance)
     print(user_id, 'user id')
     user.save()
     return Response('successfully reset net worth', status=200)
+
 
 # @api_view(['GET'])
 # def example(request):
