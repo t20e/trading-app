@@ -31,7 +31,7 @@ class Trade(models.Model):
     predictingUp = models.BooleanField()
     price_at_trade = models.FloatField()
     expires_at = models.DateTimeField(auto_now_add=True)
-    profit = models.PositiveIntegerField(default=0)
+    profit = models.FloatField(default=0)
     investAmount = models.PositiveIntegerField()
     isClosed = models.BooleanField(default=False)
     objects = TradeManager()

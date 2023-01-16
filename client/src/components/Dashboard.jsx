@@ -9,7 +9,8 @@ import TradeChart from './TradeChart'
 import { UserContext } from '../context/UserContext'
 import axios from 'axios';
 import { CurrencyContext } from '../context/CurrencyContext';
-import { AllTradesContext} from '../context/AllTradesContext';
+import { AllTradesContext } from '../context/AllTradesContext';
+import AboutProjectPopUp from './popUps/AboutProjectPopUp'
 
 const Dashboard = () => {
     const { currencyPairPrices, setCurrencyPairPrices } = useContext(CurrencyContext)
@@ -94,6 +95,10 @@ const Dashboard = () => {
                     loggedUser ? <TradingPanel /> : null
                 }
             </div>
+            {loggedUser ? <AboutProjectPopUp /> : null}
+            {/* TODO make sure this is only shown once when the user first
+             creates account set a varible in the model to newUser and set
+              it defult to true */}
         </div>
     )
 }

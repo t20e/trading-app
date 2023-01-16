@@ -15,19 +15,27 @@ env = environ.Env()
 environ.Env.read_env()
 
 
-
-# def checkTradeProfit(user_id, tradeObj):
-#     print(user_id, tradeObj)
-#     print('\nwaited 40 secs!!!\n')
-    # ping url to get the pair at the current price
-
-    # check if the current price is > or < tradeObj price_at_trade
-
-    # then check whether user predictUp or down
-
-    # update the trade object with the result
-    # add the profit amount back to user with a 92% increase if profit
-    # or add nothing
+@api_view(['POST'])
+def checkTradeProfit(request):
+    curr_price = float(request.POST.get('curr_price'))
+    user = User.objects.filter(id=int(request.POST.get('user_id'))).first()
+    trade = Trade.objects.filter(id=int(request.POST.get('trade_id'))).first()
+    profit = 0
+    print(trade.price_at_trade)
+    if trade.predictingUp:
+        if trade.price_at_trade <= curr_price:
+            profit = trade.investAmount + (trade.investAmount * .92)
+    else:
+        if trade.price_at_trade >= curr_price:
+            profit = trade.investAmount + (trade.investAmount * .92)
+    trade.profit = profit
+    trade.isClosed = True
+    trade.save()
+    user.balance += profit
+    user.save()
+    # print(profit, 'profit', curr_price, trade.price_at_trade)
+    serializer = TradeSerializer(trade)
+    return Response({'trade': serializer.data}, status=200)
 
 
 @api_view(['POST'])
@@ -44,7 +52,7 @@ def trade(request):
     print(res)
     if isValid is None:
         return Response({"error": res}, status=401)
-    # # wait 15 secs then call the function
+    # wait 15 secs then call the function
     # wait = Timer(40.0, checkTradeProfit, {data['user_id'], res})
     # wait.start()
     # print('successfully entered trade')

@@ -1,7 +1,6 @@
 #chart {
     width: 100%;
     height: 100%;
-    background-color: silver;
 }
 
 .currencySelector__block {
@@ -56,13 +55,15 @@
 }
 .currencySelector__block ul div li:hover:not(:first-child) {
     font-size: small;
-    color: red;
+    color: #B3DEC1;
 }
 
 .currencySelector__block ul div li:first-child {
     font-size: xx-small;
     white-space: nowrap;
     font-style: italic;
+    text-decoration: underline;
+
 }
 
 .currencySelector__block ul:hover div {

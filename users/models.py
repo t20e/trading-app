@@ -75,12 +75,10 @@ class User(models.Model):
         max_length=500,
     )
     curr_currency = models.CharField(max_length=12, default='EUR/USD')
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
     age = models.PositiveIntegerField()
-    balance = models.PositiveIntegerField(default=15000)
+    balance = models.FloatField(default=15000)
     test =models.PositiveIntegerField(default=15000)
     objects = UserManager()
 

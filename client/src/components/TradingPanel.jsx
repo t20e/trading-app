@@ -41,7 +41,7 @@ const TradingPanel = () => {
                                         return (
                                             <div key={index} className='repeatedPast_trade_cont'>
                                                 <h5>{i.currency_pair}</h5>
-                                                <h5>${i.price_at_trade}</h5>
+                                                <h5>${Number(i.price_at_trade).toFixed(3)}</h5>
                                                 {i.predictingUp ?
                                                     greenArrowSvg : downArrowSvg
                                                 }
@@ -68,7 +68,7 @@ const TradingPanel = () => {
                                             return (
                                                 <div key={index} className='repeatedPast_trade_cont' >
                                                     <h5>{i.currency_pair}</h5>
-                                                    <h5>${i.price_at_trade}</h5>
+                                                    <h5>${Number(i.price_at_trade).toFixed(3)}</h5>
                                                     {i.predictingUp ?
                                                         greenArrowSvg : downArrowSvg
                                                     }

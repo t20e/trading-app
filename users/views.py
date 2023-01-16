@@ -121,6 +121,8 @@ def getLoggedUser(request):
         return Response('Unauthenticated token!', status=401)
     print('payload\n\n\n\n', payload)
     user = User.objects.filter(id=payload['id']).first()
+    if user is None:
+        return Response('Unauthenticated token!', status=401)
     currencyData = getHistoricalCurrencyPrice(user.curr_currency)
     serializer = UserSerializer(user)
     allTrades = user.trades

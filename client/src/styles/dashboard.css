@@ -5,7 +5,7 @@
 
 #dash__colTwo {
     flex: 10;
-    background-color: darkgoldenrod;
+    background-color: #E8EDE8;
 }
 
 #dash__colThree {
@@ -74,7 +74,7 @@
     top: -10%;
     width: 4.5em;
     transform: translate(-50%, -10%);
-    background-color: #F7CFF6;
+    background-color: #F7F9F7;
 }
 
 .tradeBlock__alert {
@@ -122,14 +122,24 @@
 }
 
 .tradeBlock__btn button {
+    height: 100%;
     cursor: pointer;
     background-color: transparent;
-    border: none;
     width: 40%;
+    border: none;
 }
 
 .tradeBlock__btn button:hover {
-    background-color: red;
+    background-color: #B3DEC1;
+    border: .2em solid #B3DEC1;
+}
+
+.tradeBlock__btn button:first-of-type:hover {
+    border-bottom-left-radius: .1em;
+}
+
+.tradeBlock__btn button:nth-last-of-type(1):hover {
+    border-bottom-right-radius: .1em;
 }
 
 .tradeBlock__middle {
@@ -168,15 +178,15 @@
 }
 
 .border--right {
-    border-right: 1px solid black;
+    border-right: .1em solid black;
 }
 
 .currPastTradesTab--selected {
-    color: white;
+    color: #CDCBCD;
 }
 
 .lineBreak {
-    width: 95%;
+    width: 75%;
     align-self: center;
     height: .1em;
     background-color: black;
@@ -191,12 +201,13 @@
     overflow: scroll;
     overflow-x: hidden;
 }
-.pastTrades__headers{
+
+.pastTrades__headers {
     position: sticky;
     top: 0em;
-    /* TODO set a background similar to background */
-    background-color: white;
+    background-color: #F7F9F7;
 }
+
 .pastTrades__headers h5 {
     text-decoration: underline;
 }

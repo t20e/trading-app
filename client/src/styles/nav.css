@@ -62,7 +62,7 @@ nav button {
 }
 
 nav button:hover {
-    color: red;
+    color: #B3DEC1;
 }
 
 nav svg {
@@ -74,25 +74,25 @@ nav svg {
 
 /* papers svg  */
 nav li:nth-child(2):hover .changeColorSvg {
-    stroke: red;
+    stroke: #B3DEC1;
 }
 
 nav li:nth-child(2):hover .fileColorSvg {
-    fill: red;
+    fill: #B3DEC1;
 }
 
 
 /* reset svg */
 nav li:nth-child(3):hover .fileColorSvg {
-    fill: red
+    fill: #B3DEC1
 }
 
 nav li:nth-child(3):hover .changeColorSvg {
-    stroke: red;
+    stroke: #B3DEC1;
 }
 
 /* logout svg */
 nav li:nth-child(4):hover .changeColorSvg {
     background-color: sandybrown;
-    stroke: red;
+    stroke: #B3DEC1;
 }

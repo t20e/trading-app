@@ -30,20 +30,39 @@ const TradingController = (props) => {
         data.append("price_at_trade", currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1]);
         data.append("predictingUp", predictingUp);
         data.append("currency_pair", loggedUser.curr_currency);
-
         axios.post('http://localhost:8000/api/trades/trade/', data)
             .then(res => {
                 setLoggedUser({ ...loggedUser, balance: loggedUser.balance - investAmount })
                 if (investAmount > loggedUser.balance) {
                     setInvestAmount(loggedUser.balance / 2)
                 }
-                console.log(res)
-                setAllTrades([...allTrades, res.data.trade])
-                // use the returned tradeObj to create a new trade object in the panel with 
-                // a loading sign
-                // then 
-                // set timeout to pull that trade in 40 seconds
-                // if profit update the user with profit amount else update trade object in the panel with new data
+                setAllTrades([res.data.trade, ...allTrades])
+                setTimeout(() => {
+                    checkTradeProfit(res.data.trade)
+                }, 2000);
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }
+    const checkTradeProfit = (tradeObj) => {
+        // if profit update the user with profit amount else update trade object in the panel with new data
+        const data = new FormData()
+        data.append("trade_id", tradeObj.id);
+        data.append("user_id", loggedUser.id);
+        data.append("curr_price", currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1]);
+        axios.post('http://localhost:8000/api/trades/checkProfit/', data)
+            .then(res => {
+                // console.log(res.data)
+                let trade = res.data.trade
+                console.log(trade.id, 'here')
+                setLoggedUser({ ...loggedUser, balance: loggedUser.balance += trade.profit })
+                allTrades.map(obj => {
+                    console.log(obj.id)
+                    if (obj.id === trade.id) {
+                        console.log(obj, 'found obj')
+                    }
+                })
             })
             .catch(err => {
                 console.error(err)
@@ -61,6 +80,7 @@ const TradingController = (props) => {
         let check = checkInputAmount(Number(amount))
         if (check) return true;
     }
+
     const checkInputAmount = (amount) => {
         let checkIfErr = false
         if (investAmount + amount < 0) {

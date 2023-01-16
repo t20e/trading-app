@@ -11,7 +11,6 @@ const TradeChart = (props) => {
 	// TODO add currrecny PAir to context
 	const { currencyPairPrices, setCurrencyPairPrices } = useContext(CurrencyContext)
 	const { loggedUser, setLoggedUser } = useContext(UserContext)
-
 	const [chartData, setChartData] = useState({
 		series: [
 			{
@@ -21,13 +20,13 @@ const TradeChart = (props) => {
 		],
 		options: {
 			chart: {
-				type: 'area',
+				type: 'line',
 				stacked: false,
 				height: '100%',
 				width: '100%',
 				toolbar: {
 					autoSelected: 'zoom',
-					show: true,
+					show: false,
 					offsetX: -20,
 					offsetY: 0,
 					tools: {
@@ -41,9 +40,25 @@ const TradeChart = (props) => {
 						customIcons: []
 					},
 				},
+				animations: {
+					enabled: true,
+					easing: 'linear',
+					dynamicAnimation: {
+						speed: 500,
+						enabled: true,
+					}
+				},
 			},
+			tooltip: {
+				theme: 'dark',
+			},
+			colors: ['#087243', '#802392'],
 			dataLabels: {
 				enabled: false
+			},
+			stroke: {
+				curve: "smooth",
+				width: 2
 			},
 			zoom: {
 				type: 'xy',
@@ -61,8 +76,9 @@ const TradeChart = (props) => {
 			fill: {
 				type: 'gradient',
 				gradient: {
+					gradientToColors: ['#F55555', '#6078ea', '#6094ea'],
 					shadeIntensity: 1,
-					inverseColors: false,
+					inverseColors: true, //set this to false to not inverse the gradient color
 					opacityFrom: 0.5,
 					opacityTo: 0,
 					stops: [0, 90, 100]
@@ -71,7 +87,10 @@ const TradeChart = (props) => {
 			yaxis: {
 				type: 'datetime',
 				title: {
-					text: 'Price'
+					text: 'Price',
+					style: {
+						color: 'white'
+					},
 				},
 				decimalsInFloat: 3,
 				labels: {
@@ -92,6 +111,7 @@ const TradeChart = (props) => {
 				},
 			},
 			xaxis: {
+				range: 1000000000, //this made the graph zoom better
 				type: 'datetime',
 				labels: {
 					show: true,
@@ -107,23 +127,24 @@ const TradeChart = (props) => {
 		}
 	})
 	useEffect(() => {
-		console.log('here changing charts data')
+		// console.log('here changing charts data')
 		setChartData({
 			...chartData, series: [
 				{
 					name: loggedUser.curr_currency,
 					data: [...currencyPairPrices.rates]
-				}
-			]
+				},
+			],
 		})
 	}, [currencyPairPrices]);
 	useEffect(() => {
-		let interval = setInterval(() => {
+		let interval
+		interval = setInterval(() => {
 			const today = new Date();
 			const date = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + today.getDate();
 			let time = ('0' + today.getHours()).slice(-2) + ':' + ('0' + today.getMinutes()).slice(-2) + ':' + ('0' + today.getSeconds()).slice(-2);
-			console.log(date + ' ' + time)
-			let copy = {...currencyPairPrices}
+			// console.log(date + ' ' + time)
+			let copy = { ...currencyPairPrices }
 			copy.rates.push([date + ' ' + time, currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1] + generateRandomFloat(-.05, .05)])
 			setCurrencyPairPrices(copy)
 			// setCurrencyPairPrices({
@@ -132,10 +153,29 @@ const TradeChart = (props) => {
 			// 	// ['2023-01-15 11:45:48', currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1] + generateRandomFloat(-.1, .1)]]
 			// })
 		}, 3000);
+		let time_out = setTimeout(() => {
+			setChartData({
+				...chartData,
+				options: {
+					...chartData.options,
+					xaxis: {
+						...chartData.options.xaxis,
+						range: 100000
+					}
+				}
+			})
+		}, 7000)
 		return () => {
 			clearInterval(interval)
+			clearTimeout(time_out)
+			// clearTimeout(timeOutChangeZoomLevel)
 		};
 	}, []);
+	// TODO 
+	// make the size of the chart different zoom size depending on the currency pair
+	// make sure the preditction and profit id correct
+	// edit the all trades data after retrieving the profit
+
 	const changeCurrencyPair = (pair) => {
 		axios.get(`http://localhost:8000/api/trades/getCurrencyPairPrice?pair=${pair}&id=${loggedUser.id}`)
 			.then(res => {
@@ -147,7 +187,7 @@ const TradeChart = (props) => {
 				console.error(err)
 			})
 	}
-	console.log('!!! rerendering trading chart !!!')
+	// console.log('!!! rerendering trading chart !!!')
 
 
 
