@@ -8,9 +8,11 @@ import btnClickAudio from '../../miscellaneous/btnClickAudio.mp3'
 import axios from 'axios';
 import { UserContext } from '../../context/UserContext'
 import { CurrencyContext } from '../../context/CurrencyContext';
+import { AllTradesContext} from '../../context/AllTradesContext';
 
 const Landing_page = () => {
-    const { currencyPair, setCurrencyPair } = useContext(CurrencyContext)
+    const { allTrades, setAllTrades } = useContext(AllTradesContext)
+    const { currencyPairPrices, setCurrencyPairPrices } = useContext(CurrencyContext)
     const { loggedUser, setLoggedUser } = useContext(UserContext)
     const logoRef = useRef(null)
     const btnRef = useRef(null)
@@ -49,12 +51,12 @@ const Landing_page = () => {
                 console.log('successfully login or registered user')
                 // localStorage.setItem('userToken', res.userToken)
                 setLoggedUser(res.data.body.user)
-                setCurrencyPair(res.data.body.currencyData)
+                setCurrencyPairPrices(res.data.body.currencyData)
+                setAllTrades(res.data.body.allTrades)
                 redirect('/')
             })
             .catch(err => {
                 console.log(err)
-                alert(err)
             })
     }
     const changeLayout = (path, e) => {

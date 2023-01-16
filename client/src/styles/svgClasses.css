@@ -1,6 +1,6 @@
 .arrowSelectorSvg {
     /* fill: none; */
-    fill:#FFFFFF;
+    fill: #FFFFFF;
     /* stroke: white; */
     stroke-width: 60;
     stroke-linecap: round;
@@ -11,26 +11,27 @@
     transform-origin: 50% 50%; */
 }
 
+
 .downArrow0 {
     fill: none;
-    stroke: #AC3931;
-    stroke-width: 2;
+    stroke: #AC3A31;
+    stroke-linecap: round;
     stroke-miterlimit: 10;
 }
 
 .downArrow1 {
-    fill: #AC3931;
+    fill: #AC3A31;
 }
 
 .greenArrow0 {
     fill: none;
-    stroke: #115538;
-    stroke-width: 2;
+    stroke: #B4DDC0;
+    stroke-linecap: round;
     stroke-miterlimit: 10;
 }
 
 .greenArrow1 {
-    fill: #115538;
+    fill: #B4DDC0;
 }
 
 

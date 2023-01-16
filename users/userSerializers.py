@@ -11,6 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         # or to specify fields this one excludes password hash
         fields = [
-            'id', 'currCurrency', 'first_name', 'last_name', 'email', 'pfp_id',
+            'id', 'curr_currency', 'first_name', 'last_name', 'email', 'pfp_id',
             'created_at', 'updated_at', 'age', 'balance'
         ]

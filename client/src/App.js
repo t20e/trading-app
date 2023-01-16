@@ -6,18 +6,21 @@ import Gitlink from './components/GitLink'
 import Dashboard from "./components/Dashboard";
 import { UserProvider } from "./context/UserContext";
 import { CurrencyProvider } from "./context/CurrencyContext";
+import { AllTradesProvider } from "./context/AllTradesContext";
 
 const App = () => {
   return (
     <UserProvider>
       <CurrencyProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/landing_page" element={<Landing_page />}></Route>
-            <Route path="/" element={<Dashboard />}></Route>
-          </Routes>
-          <Gitlink />
-        </BrowserRouter>
+        <AllTradesProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/landing_page" element={<Landing_page />}></Route>
+              <Route path="/" element={<Dashboard />}></Route>
+            </Routes>
+            <Gitlink />
+          </BrowserRouter>
+        </AllTradesProvider>
       </CurrencyProvider>
     </UserProvider>
   );

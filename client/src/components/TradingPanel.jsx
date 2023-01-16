@@ -1,81 +1,83 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import TradingController from './TradingController'
-import {greenArrowSvg, downArrowSvg} from '../miscellaneous/svgIcons'
+import { greenArrowSvg, downArrowSvg } from '../miscellaneous/svgIcons'
+import { AllTradesContext } from '../context/AllTradesContext';
 
 
 
 const TradingPanel = () => {
-    const [togglePastTrades, setTogglePastTrades] = useState(true)
+    const [toggleOpenTrades, setToggleOpenTrades] = useState(true)
+    const { allTrades, setAllTrades } = useContext(AllTradesContext)
+
     return (
         <>
             <div className='tradingUiCont'>
                 <TradingController />
             </div>
-            <div className='pastTradesCont'>
+            <div className='viewTradesCont'>
                 <div className='pastTrades__rowOne'>
-                    <div onClick={() => setTogglePastTrades(!togglePastTrades)} className={`border--right ${togglePastTrades ? 'currPastTradesTab--selected' : ''}`}>
+                    <div onClick={() => setToggleOpenTrades(!toggleOpenTrades)} className={`border--right ${toggleOpenTrades ? 'currPastTradesTab--selected' : ''}`}>
                         <p>Open Trades</p>
                     </div>
-                    <div onClick={() => setTogglePastTrades(!togglePastTrades)} className={!togglePastTrades ? 'currPastTradesTab--selected' : ''}>
+                    <div onClick={() => setToggleOpenTrades(!toggleOpenTrades)} className={!toggleOpenTrades ? 'currPastTradesTab--selected' : ''}>
                         <p>Closed Trades</p>
                     </div>
                 </div>
                 <div className='lineBreak'></div>
                 {
-                    togglePastTrades ?
+                    toggleOpenTrades ?
                         <div className='pastTrades__rowTwo'>
-                            {/* past trades ex  */}
                             <div className='pastTrades__headers repeatedPast_trade_cont'>
                                 <h5>currency</h5>
                                 <h5>price</h5>
                                 <h5>prediction</h5>
                                 <h5 >time</h5>
                             </div>
-                            <div className='repeatedPast_trade_cont'>
-                                <h5>EURO/USD</h5>
-                                <h5>$1.04</h5>
-                                {greenArrowSvg}
-                                <h5 >1:01</h5>
-                            </div>
-                            <div className='repeatedPast_trade_cont'>
-                                <h5>EURO/USD</h5>
-                                <h5>$1.04</h5>
-                                {downArrowSvg}
-                                <h5 >4:00</h5>
-                            </div>
-                            <div className='repeatedPast_trade_cont'>
-                                <h5>EURO/USD</h5>
-                                <h5>$1.04</h5>
-                                {greenArrowSvg}
-                                <h5 >2:00</h5>
-                            </div>
+
+                            {
+                                allTrades.map((i, index) => {
+                                    if (i.isClosed === false) {
+                                        // console.log(i)
+                                        return (
+                                            <div key={index} className='repeatedPast_trade_cont'>
+                                                <h5>{i.currency_pair}</h5>
+                                                <h5>${Number(i.price_at_trade).toFixed(3)}</h5>
+                                                {i.predictingUp ?
+                                                    greenArrowSvg : downArrowSvg
+                                                }
+                                                <h5 className={i.profit > 0 ? 'color--goodTrade' : 'color--badTrade'}>${i.profit}</h5>
+                                            </div>
+                                        )
+                                    }
+                                })
+                            }
                         </div>
                         :
                         <div className='pastTrades__rowTwo'>
-                            {/* past trades ex  */}
-                            <div className='pastTrades__headers repeatedPast_trade_cont'>
-                                <h5>currency</h5>
-                                <h5>price</h5>
-                                <h5>prediction</h5>
-                                <h5 >profit</h5>
-                            </div>
-                            <div className='repeatedPast_trade_cont'>
-                                <h5>EURO/USD</h5>
-                                <h5>price</h5>
-                                {greenArrowSvg}
-                                <h5 className='color--goodTrade'>$900</h5>
-                            </div>
-                            <div className='repeatedPast_trade_cont'>
-                                <h5>EURO/USD</h5>
-                                <h5>price</h5>
-                                {downArrowSvg}
-                                <h5 className='color--badTrade'>$0</h5>
-                            </div>
-                            <div className='repeatedPast_trade_cont'>
-                                <h5>EURO/USD</h5>
-                                <h5>price</h5>
-                                {greenArrowSvg}
-                                <h5 className='color--goodTrade'>$900</h5>
+                            <div>
+                                <div className='pastTrades__headers repeatedPast_trade_cont'>
+                                    <h5>currency</h5>
+                                    <h5>price</h5>
+                                    <h5>prediction</h5>
+                                    <h5 >profit</h5>
+                                </div>
+                                {
+                                    allTrades.map((i, index) => {
+                                        // console.log(i)
+                                        if (i.isClosed === true) {
+                                            return (
+                                                <div key={index} className='repeatedPast_trade_cont' >
+                                                    <h5>{i.currency_pair}</h5>
+                                                    <h5>${Number(i.price_at_trade).toFixed(3)}</h5>
+                                                    {i.predictingUp ?
+                                                        greenArrowSvg : downArrowSvg
+                                                    }
+                                                    <h5>TIME</h5>
+                                                </div>
+                                            )
+                                        }
+                                    })
+                                }
                             </div>
                         </div>
                 }

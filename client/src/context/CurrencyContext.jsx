@@ -3,8 +3,8 @@ import axios from 'axios';
 export const CurrencyContext = createContext()
 
 export const CurrencyProvider = (props) => {
-    const [currencyPair, setCurrencyPair] = useState(null)
-    const currencyValue = useMemo(() => ({ currencyPair, setCurrencyPair }))
+    const [currencyPairPrices, setCurrencyPairPrices] = useState(null)
+    const currencyValue = useMemo(() => ({ currencyPairPrices, setCurrencyPairPrices }))
 
 
     return (

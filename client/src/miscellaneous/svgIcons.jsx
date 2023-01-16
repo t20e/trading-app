@@ -1,25 +1,28 @@
-export const downArrowSvg = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.3 35.4" >
+export const downArrowSvg = <svg xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 9.1 16" >
     <g>
         <g>
-            <line className="downArrow0" x1="8.1" y1="21.2" x2="8.1" y2="0" />
+            <line class="downArrow0" x1="4.5" y1="12.4" x2="4.5" y2="0.5" />
             <g>
-                <polygon className="downArrow1" points="8.1,35.4 16.3,15.5 8.1,20.2 0,15.5 			" />
+                <path class="downArrow1" d="M4.5,12c-1-1-3.1-1.5-4.5-1.6c1.9,1.4,3.6,3.3,4.5,5.5c0.9-2.3,2.7-4,4.5-5.5C7.6,10.6,5.7,11,4.5,12z" />
             </g>
         </g>
     </g>
 </svg>
 
+
 export const greenArrowSvg = <svg xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 16.3 35.4" >
+    viewBox="0 0 9.1 16" >
     <g>
         <g>
-            <line className="greenArrow0" x1="8.1" y1="14.1" x2="8.1" y2="35.4" />
+            <line class="greenArrow0" x1="4.5" y1="3.6" x2="4.5" y2="15.5" />
             <g>
-                <polygon className="greenArrow1" points="8.1,0 0,19.9 8.1,15.2 16.3,19.9 			" />
+                <path class="greenArrow1" d="M4.5,4c1,1,3.1,1.5,4.5,1.6C7.2,4.1,5.5,2.3,4.5,0C3.6,2.3,1.9,4,0,5.5C1.5,5.4,3.4,5,4.5,4z" />
             </g>
         </g>
     </g>
 </svg>
+
 
 export const pastTradesSvg = <svg
     xmlns="http://www.w3.org/2000/svg"
