@@ -2,9 +2,9 @@ export const downArrowSvg = <svg xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 9.1 16" >
     <g>
         <g>
-            <line class="downArrow0" x1="4.5" y1="12.4" x2="4.5" y2="0.5" />
+            <line className="downArrow0" x1="4.5" y1="12.4" x2="4.5" y2="0.5" />
             <g>
-                <path class="downArrow1" d="M4.5,12c-1-1-3.1-1.5-4.5-1.6c1.9,1.4,3.6,3.3,4.5,5.5c0.9-2.3,2.7-4,4.5-5.5C7.6,10.6,5.7,11,4.5,12z" />
+                <path className="downArrow1" d="M4.5,12c-1-1-3.1-1.5-4.5-1.6c1.9,1.4,3.6,3.3,4.5,5.5c0.9-2.3,2.7-4,4.5-5.5C7.6,10.6,5.7,11,4.5,12z" />
             </g>
         </g>
     </g>
@@ -15,9 +15,9 @@ export const greenArrowSvg = <svg xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 9.1 16" >
     <g>
         <g>
-            <line class="greenArrow0" x1="4.5" y1="3.6" x2="4.5" y2="15.5" />
+            <line className="greenArrow0" x1="4.5" y1="3.6" x2="4.5" y2="15.5" />
             <g>
-                <path class="greenArrow1" d="M4.5,4c1,1,3.1,1.5,4.5,1.6C7.2,4.1,5.5,2.3,4.5,0C3.6,2.3,1.9,4,0,5.5C1.5,5.4,3.4,5,4.5,4z" />
+                <path className="greenArrow1" d="M4.5,4c1,1,3.1,1.5,4.5,1.6C7.2,4.1,5.5,2.3,4.5,0C3.6,2.3,1.9,4,0,5.5C1.5,5.4,3.4,5,4.5,4z" />
             </g>
         </g>
     </g>
@@ -84,8 +84,19 @@ export const err_red_exclamationPoint = <svg xmlns="http://www.w3.org/2000/svg"
 c-0.2-2.6-0.3-7.5-0.3-12.4V2.1H3v6.4c0,4.9-0.1,9.8-0.3,12.4C2.6,21,1.5,21,1.5,20.9z"/>
 </svg>
 
-export const no_user_pfp = <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 225 225"><rect class="noPfpSvg2" width="225" height="225" />
-    <path class="noPfpSvg" d="M116.24,123h-7.47c-37.15,0-67.26,23.74-67.26,63.5h0s142,0,142,0h0c0-39.76-30.11-63.5-67.26-63.5Z" />
-    <circle class="noPfpSvg" cx="112.5" cy="73.5" r="34.5" />
+export const no_user_pfp = <svg id="pfp" xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 225 225"><rect className="noPfpSvg2" width="225" height="225" />
+    <path className="noPfpSvg" d="M116.24,123h-7.47c-37.15,0-67.26,23.74-67.26,63.5h0s142,0,142,0h0c0-39.76-30.11-63.5-67.26-63.5Z" />
+    <circle className="noPfpSvg" cx="112.5" cy="73.5" r="34.5" />
+</svg>
+
+export const loading_svg = <svg xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 289 287.6" >
+    <path className="loadingSvg" d="M275.9,106.2c9.6,34.1,5.9,71.9-13.1,105c-37.6,65.3-121.1,87.8-186.4,50.2S-11.4,140.3,26.2,75
+c21.7-37.7,58.6-61.1,98.5-67"/>
+</svg>
+
+export const checkMarkSvg = <svg xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 883.1 632.7" >
+    <polyline className="checkMarkSvg" points="15,354.9 271.6,611.5 868.1,15 " />
 </svg>

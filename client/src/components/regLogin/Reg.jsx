@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styles from '../../styles/regLogin.css'
-import { err_exclamationPoint } from '../../miscellaneous/svgIcons'
+import { err_exclamationPoint, loading_svg, checkMarkSvg } from '../../miscellaneous/svgIcons'
+import axios from 'axios';
 
 
-// TODO make it check if theres a email address with that email as user types it in
 const inputsInOrder = ['firstName', 'lastName', 'age_pfp', 'email', 'password', 'confirmPassword']
 const onlyLettersRegex = new RegExp(/^[A-Za-z]+$/)
 const imgRegex = new RegExp("[^\\s]+(.*?)\\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$")
@@ -24,10 +24,23 @@ const Reg = ({ submitForm, changeLayout, vibrateErr, changeErrVibrate }) => {
     const [renderImg, setRenderimg] = useState('')
     const [renderImgErr, setRenderImgErr] = useState(null)
     const [formErrors, setFormErrors] = useState({})
+    const time_out = useRef(null)
+    const [changingLogos, setChangingLogos] = useState(loading_svg)
 
+    useEffect(() => {
+        // Clear the timeout when the component unmounts
+        return () => {
+            clearTimeout(time_out.current)
+        }
+    }, []);
     const regUser = (e) => {
         e.preventDefault()
-        if (Object.keys(formErrors).length > 0) {
+        if (currInput === 'email') {
+            setFormErrors({ 'checkingEmail': 'checking if email is available' })
+            checkTakenEmail(newUser.email)
+            return
+        }
+        else if (Object.keys(formErrors).length > 0) {
             changeErrVibrate()
             return
         } else if (inputsInOrder.indexOf(currInput) !== inputsInOrder.length - 1) {
@@ -46,6 +59,29 @@ const Reg = ({ submitForm, changeLayout, vibrateErr, changeErrVibrate }) => {
         submitForm(formData, 'api/users/register/')
     }
 
+    const checkTakenEmail = (email) => {
+        console.log(email)
+        axios.get(`http://localhost:8000/api/users/checkEmail?email=${email}`)
+            .then((res) => {
+                let isEmailTaken = res.data
+                time_out.current = setTimeout(() => {
+                    if (isEmailTaken[0]) {
+                        setFormErrors({})
+                        setFormErrors({ 'email': isEmailTaken[1] })
+                    } else {
+                        setChangingLogos(checkMarkSvg)
+                        time_out.current = setTimeout(() => {
+                            setFormErrors({})
+                            setCurrInput(inputsInOrder[inputsInOrder.indexOf(currInput) + 1])
+                            setChangingLogos(loading_svg)
+                        }, 1500)
+                    }
+                }, 2000)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }
     const goBackInput = (e) => {
         e.preventDefault();
         setCurrInput(inputsInOrder[inputsInOrder.indexOf(currInput) - 1])
@@ -189,10 +225,15 @@ const Reg = ({ submitForm, changeLayout, vibrateErr, changeErrVibrate }) => {
                         value={newUser.confirmPassword}
                     />
                     : ''}
+                {formErrors['checkingEmail'] ?
+                    <div className={`email__check ${vibrateErr}`}>
+                        <p >{formErrors['checkingEmail']}</p>
+                        {changingLogos}
+                    </div>
+                    : null}
                 {formErrors[currInput] ?
                     <div className={`reg__err ${vibrateErr}`}>
                         <p >{formErrors[currInput]}</p>
-                        {/* <img src="https://portfolio-avis-s3.s3.amazonaws.com/app/icons/err_exclamationPoint.svg" alt="" /> */}
                         {err_exclamationPoint}
                     </div>
                     : null}

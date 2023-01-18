@@ -13,56 +13,89 @@ const numsOnly = new RegExp(/^[0-9]*$/)
 const TradingController = (props) => {
     const { allTrades, setAllTrades } = useContext(AllTradesContext)
     const { loggedUser, setLoggedUser } = useContext(UserContext)
-
     const [investAmount, setInvestAmount] = useState(500)
     const [errorMsg, setErrorMsg] = useState(false)
     const { currencyPairPrices, setCurrencyPairPrices } = useContext(CurrencyContext)
+    const currPriceRef = useRef(null)
+    // # to clear interval
+    const intervalRef = useRef(null)
+    // # to clear timeout
+    const time_out = useRef(null)
+    // # to store the trades data
+    const tradeRef = useRef(null)
 
+    useEffect(() => {
+        // Clear the timeout when the component unmounts
+        return () => {
+            clearInterval(intervalRef.current)
+            clearTimeout(time_out.current)
+        }
+    }, []);
+    useEffect(() => {
+        tradeRef.current = allTrades
+    }, [allTrades])
+    useEffect(() => {
+        currPriceRef.current = currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1]
+    }, [currencyPairPrices])
 
     const trade = (e, predictingUp) => {
         e.preventDefault()
         if (checkInputAmount(investAmount)) {
             return
         }
+        // console.log('currentPrice', currPriceRef.current)
         const data = new FormData()
         data.append("investAmount", investAmount);
         data.append("user_id", loggedUser.id);
-        data.append("price_at_trade", currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1]);
+        data.append("price_at_trade", currPriceRef.current);
         data.append("predictingUp", predictingUp);
         data.append("currency_pair", loggedUser.curr_currency);
         axios.post('http://localhost:8000/api/trades/trade/', data)
             .then(res => {
+                let trade = res.data.trade
+                trade.counter = 2
+                setAllTrades([trade, ...allTrades])
                 setLoggedUser({ ...loggedUser, balance: loggedUser.balance - investAmount })
                 if (investAmount > loggedUser.balance) {
                     setInvestAmount(loggedUser.balance / 2)
                 }
-                setAllTrades([res.data.trade, ...allTrades])
-                setTimeout(() => {
-                    checkTradeProfit(res.data.trade)
+                time_out.current = setTimeout(() => {
+                    checkTradeProfit(trade)
                 }, 2000);
+                intervalRef.current = setInterval(() => {
+                    tradeRef.current.map(obj => {
+                        if (obj.id === trade.id) {
+                            if (obj.counter === 0) {
+                                return clearInterval(intervalRef)
+                            }
+                            obj.counter -= .5
+                        }
+                    })
+                }, 500)
             })
             .catch(err => {
                 console.error(err)
             })
     }
+
     const checkTradeProfit = (tradeObj) => {
         // if profit update the user with profit amount else update trade object in the panel with new data
+        // console.log('new price', currPriceRef.current)
         const data = new FormData()
         data.append("trade_id", tradeObj.id);
         data.append("user_id", loggedUser.id);
-        data.append("curr_price", currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1]);
+        data.append("curr_price", currPriceRef.current);
         axios.post('http://localhost:8000/api/trades/checkProfit/', data)
             .then(res => {
-                // console.log(res.data)
                 let trade = res.data.trade
-                console.log(trade.id, 'here')
                 setLoggedUser({ ...loggedUser, balance: loggedUser.balance += trade.profit })
-                allTrades.map(obj => {
-                    console.log(obj.id)
+                tradeRef.current.map(obj => {
                     if (obj.id === trade.id) {
-                        console.log(obj, 'found obj')
+                        obj.isClosed = true
+                        obj.profit = trade.profit
                     }
                 })
+                setAllTrades(tradeRef.current)
             })
             .catch(err => {
                 console.error(err)
@@ -119,7 +152,7 @@ const TradingController = (props) => {
     }
     return (
         <>
-            <h1> Balance: ${loggedUser.balance}</h1>
+            <h1> Balance: {parseFloat(loggedUser.balance).toFixed(2)}</h1>
             <div className={`tradeAmount__cont ${errorMsg ? 'increaseWidth' : ''}`}>
                 <p>Amount</p>
                 <input type="text" onChange={changeAmount} value={`$${investAmount}`} />

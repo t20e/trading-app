@@ -95,6 +95,45 @@ button {
   cursor: pointer;
 }
 
+
+/* table css */
+table {
+  table-layout: fixed;
+  width: 100%;
+  height: 50%;
+  border-collapse: collapse;
+}
+
+table thead {
+  position: sticky;
+  top: -1em;
+  background-color: #F7F9F7;
+}
+
+table thead tr {
+  border-bottom: .1em solid #b4b4b4b1;
+}
+
+table td:first-of-type,
+table td:nth-of-type(2),
+table td:nth-of-type(3) {
+  border-right: .01em solid #CDCBCD;
+}
+
+td {
+  text-align: center;
+}
+
+td {
+  padding: .1em 0;
+}
+
+td svg {
+  height: 1.4rem;
+  width: 1.4rem;
+}
+
+
 /* input errors */
 .formErr {
   color: red;
@@ -179,7 +218,7 @@ button {
 }
 
 #aboutPopUpCont {
-  background-color: #B3DEC1;
+  background-color: #F7F9F7;
   border-radius: .5em;
   position: absolute;
   top: 50%;
@@ -187,6 +226,8 @@ button {
   transform: translate(-50%, -50%);
   padding: 1em;
   max-width: 40%;
+  max-height: 90%;
+  overflow-y: scroll;
   border: 1px solid whitesmoke;
 }
 
@@ -217,6 +258,7 @@ button {
   margin-right: 1em;
   font-size: small;
 }
-#closedPopUp{
+
+#closedPopUp {
   display: none;
 }

@@ -2,7 +2,6 @@
 
 
 
-TODO:
     user reg account
         allow user photos if they decline then
             :add a photo for user

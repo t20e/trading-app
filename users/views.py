@@ -17,13 +17,12 @@ from trades.tradeSerializers import TradeSerializer
 
 env = environ.Env()
 environ.Env.read_env()
-# TODO on login or register or getLogged user return the api currency data with base
 
 
 @api_view(['POST'])
 def register(request):
     if request.method != 'POST':
-        return JsonResponse({'method': 'not allowed'})
+        return Response({'method': 'not allowed'})
     # If no pfp in FILES, than pfp variable would be False.
     pfp = request.FILES.get('pfp', False)
     if (pfp):  # add the pfp to s3 bucket
@@ -40,6 +39,7 @@ def register(request):
         'confirmPassword': request.POST.get('confirmPassword')
     }
     isValid, res = UserManager.validate_and_create_user(data)
+    print('\nuser creation:', res, '\n')
     if isValid:
         payload = {
             'id': res.id,
@@ -91,6 +91,9 @@ def login(request):
     }
     userToken = jwt.encode(payload, env('APP_SECRET_KEY'), algorithm='HS256')
     allTrades = res.trades
+    # if res.isNewUser:
+    #     res.isNewUser = False
+    #     res.save()
     allTrades = TradeSerializer(allTrades, many=True)
     serializer = UserSerializer(res)
     currencyData = getHistoricalCurrencyPrice(res.curr_currency)
@@ -139,12 +142,18 @@ def getLoggedUser(request):
     return res
 
 
+@api_view(["GET"])
+def checkIfEmailTaken(request):
+    return Response(
+        User.objects.checkIfEmailIsTaken(request.query_params.get('email')))
+
+
 @api_view(['POST'])
 def logout(request):
     print('Logout')
     # res = Response()
     # res.delete_cookie('userToken')
-    # return res
+    # return res\
     res = HttpResponse()
     res.delete_cookie(key='userToken')
     res.data = {
