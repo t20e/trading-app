@@ -90,7 +90,7 @@ const Dashboard = () => {
                                 loggedUser.pfp_id === "False" ?
                                     no_user_pfp
                                     :
-                                    <img id='pfp' src={`https://s3-bucket-avis-new-portfolio.s3.amazonaws.com/users/${loggedUser.pfp_id}`} alt="" />
+                                    <img id='pfp' src={loggedUser.pfp_id} alt="" />
                                 : no_user_pfp
                         }
                     </li>

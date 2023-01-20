@@ -14,9 +14,16 @@ import environ
 from rest_framework.exceptions import AuthenticationFailed
 from trades.views import getHistoricalCurrencyPrice
 from trades.tradeSerializers import TradeSerializer
+from server.s3Class import S3
 
 env = environ.Env()
 environ.Env.read_env()
+
+s3Client = S3()
+
+def getSignedUrl(user_pfp_id):
+    res = s3Client.get_file(f'users/{user_pfp_id}')
+    return res
 
 
 @api_view(['POST'])
@@ -53,6 +60,8 @@ def register(request):
         # print('\n', userToken)
         allTrades = res.trades
         allTrades = TradeSerializer(allTrades, many=True)
+        if res.pfp_id != "False":
+            res.pfp_id = getSignedUrl(res.pfp_id)
         serializer = UserSerializer(res, many=False)
         currencyData = getHistoricalCurrencyPrice(res.curr_currency)
         res = Response()
@@ -68,8 +77,6 @@ def register(request):
         return res
     return Response({'body': res, 'errors': True}, status=400)
 
-
-#  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksImV4cCI6MTY3NTkwOTAxMywiaWF0IjoxNjczMzE3MDEzfQ.UVFwTz8jzIuQ3ZSxZXgkO4-7IptKI35SCBL6JfaAulY
 
 
 @api_view(['POST'])
@@ -91,10 +98,10 @@ def login(request):
     }
     userToken = jwt.encode(payload, env('APP_SECRET_KEY'), algorithm='HS256')
     allTrades = res.trades
-    # if res.isNewUser:
-    #     res.isNewUser = False
-    #     res.save()
+
     allTrades = TradeSerializer(allTrades, many=True)
+    if res.pfp_id != "False":
+        res.pfp_id = getSignedUrl(res.pfp_id)
     serializer = UserSerializer(res)
     currencyData = getHistoricalCurrencyPrice(res.curr_currency)
     res = Response()
@@ -126,6 +133,8 @@ def getLoggedUser(request):
     user = User.objects.filter(id=payload['id']).first()
     if user is None:
         return Response('Unauthenticated token!', status=401)
+    if user.pfp_id != "False":
+        user.pfp_id = getSignedUrl(user.pfp_id)
     currencyData = getHistoricalCurrencyPrice(user.curr_currency)
     serializer = UserSerializer(user)
     allTrades = user.trades
