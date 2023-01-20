@@ -16,10 +16,10 @@ const TradingPanel = () => {
             </div>
             <div className='viewTradesCont'>
                 <div className='pastTrades__rowOne'>
-                    <div onClick={() => setToggleOpenTrades(!toggleOpenTrades)} className={`border--right ${toggleOpenTrades ? 'currPastTradesTab--selected' : ''}`}>
+                    <div onClick={() => setToggleOpenTrades(!toggleOpenTrades)} className={`border--right tradesP ${toggleOpenTrades ? 'currPastTradesTab--selected' : ''}`}>
                         <p>Open Trades</p>
                     </div>
-                    <div onClick={() => setToggleOpenTrades(!toggleOpenTrades)} className={!toggleOpenTrades ? 'currPastTradesTab--selected' : ''}>
+                    <div onClick={() => setToggleOpenTrades(!toggleOpenTrades)} className={`tradesP ${!toggleOpenTrades ? 'currPastTradesTab--selected' : ''}`}>
                         <p>Closed Trades</p>
                     </div>
                 </div>
@@ -31,9 +31,8 @@ const TradingPanel = () => {
                                 <h5>currency</h5>
                                 <h5>price</h5>
                                 <h5>prediction</h5>
-                                <h5 >time</h5>
+                                <h5 >time(secs)</h5>
                             </div>
-
                             {
                                 allTrades.map((i, index) => {
                                     if (i.isClosed === false) {
@@ -45,7 +44,7 @@ const TradingPanel = () => {
                                                 {i.predictingUp ?
                                                     greenArrowSvg : downArrowSvg
                                                 }
-                                                <h5 className={i.profit > 0 ? 'color--goodTrade' : 'color--badTrade'}>${i.profit}</h5>
+                                                <h5>{i.counter ? i.counter : 'N/A'}</h5>
                                             </div>
                                         )
                                     }
@@ -63,7 +62,6 @@ const TradingPanel = () => {
                                 </div>
                                 {
                                     allTrades.map((i, index) => {
-                                        // console.log(i)
                                         if (i.isClosed === true) {
                                             return (
                                                 <div key={index} className='repeatedPast_trade_cont' >
@@ -72,7 +70,7 @@ const TradingPanel = () => {
                                                     {i.predictingUp ?
                                                         greenArrowSvg : downArrowSvg
                                                     }
-                                                    <h5>TIME</h5>
+                                                    <h5>${i.profit}</h5>
                                                 </div>
                                             )
                                         }

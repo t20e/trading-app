@@ -5,7 +5,7 @@
     transform: translate(-50%, -50%);
 }
 
-.regCont form{
+.regCont form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,11 +28,13 @@
     display: flex;
     justify-content: space-around;
 }
-.regPage__btns button{
+
+.regPage__btns button {
     padding: 0;
     margin: 0;
     color: #3B3B58;
 }
+
 .imgValP {
     display: flex;
     align-items: center;
@@ -49,6 +51,7 @@
     top: .5em;
     left: -4em;
 }
+
 #showPfp {
     visibility: visible;
     width: 3.7em;
@@ -56,6 +59,7 @@
     border-radius: 2em;
     margin-bottom: 1em;
 }
+
 .pfpLabel {
     margin-bottom: 1em;
     color: #3B3B58;
@@ -66,10 +70,12 @@
     display: block;
     width: 15rem;
 }
+
 .fileInput {
     display: none;
 }
-.reg__age_input{
+
+.reg__age_input {
     border: none;
     background-color: transparent;
     /* width: 5em; */
@@ -80,30 +86,40 @@
     outline-width: 0;
 
 }
-.reg__err{
+
+.reg__err,
+.email__check {
     background-color: white;
     border-radius: 5px;
     margin-top: .5em;
     width: auto;
-    color: red;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     padding: 0 .5em;
 }
-.reg__err svg{
-    background-color: red;
+
+.reg__err {
+    color: red;
+}
+
+.reg__err svg,
+.email__check svg {
     height: 1.7em;
     width: 1.7em;
     margin: .5em 0;
     padding: .2em;
     border-radius: 20px;
 }
-.reg__err p{
+
+.reg__err svg {
+    background-color: red;
+}
+
+.reg__err p {
     margin-right: .5em;
     white-space: nowrap;
 }
-
 
 #loginCont {
     position: absolute;
@@ -157,35 +173,40 @@
     cursor: pointer;
 }
 
-.footerP{
+.footerP {
     margin-top: 2.5em;
     text-align: center;
     color: #3B3B58;
 }
 
-@keyframes vibrate{
+@keyframes vibrate {
     0% {
         top: 0px;
         left: 0px;
     }
+
     25% {
         top: -3px;
         left: 3px;
     }
+
     50% {
         top: 0px;
         left: 0px;
     }
+
     75% {
         top: 3px;
         left: -3px;
     }
+
     100% {
         top: 0px;
         left: 0px;
     }
 }
-.errVibrate{
+
+.errVibrate {
     position: relative;
     animation: vibrate 0.1s linear 0s 30;
 }

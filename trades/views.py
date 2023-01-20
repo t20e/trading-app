@@ -62,7 +62,7 @@ def trade(request):
 
 @api_view(['GET'])
 def getCurrPairPrice(request):
-    # TODO get api
+    #  i could not find a free live currency pair api
     # print('getting curr pair price')
     # pair = request.query_params.get('pair')
     # currencies = pair.split("/")

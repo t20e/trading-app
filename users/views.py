@@ -14,16 +14,22 @@ import environ
 from rest_framework.exceptions import AuthenticationFailed
 from trades.views import getHistoricalCurrencyPrice
 from trades.tradeSerializers import TradeSerializer
+from server.s3Class import S3
 
 env = environ.Env()
 environ.Env.read_env()
-# TODO on login or register or getLogged user return the api currency data with base
+
+s3Client = S3()
+
+def getSignedUrl(user_pfp_id):
+    res = s3Client.get_file(f'users/{user_pfp_id}')
+    return res
 
 
 @api_view(['POST'])
 def register(request):
     if request.method != 'POST':
-        return JsonResponse({'method': 'not allowed'})
+        return Response({'method': 'not allowed'})
     # If no pfp in FILES, than pfp variable would be False.
     pfp = request.FILES.get('pfp', False)
     if (pfp):  # add the pfp to s3 bucket
@@ -40,6 +46,7 @@ def register(request):
         'confirmPassword': request.POST.get('confirmPassword')
     }
     isValid, res = UserManager.validate_and_create_user(data)
+    print('\nuser creation:', res, '\n')
     if isValid:
         payload = {
             'id': res.id,
@@ -53,6 +60,8 @@ def register(request):
         # print('\n', userToken)
         allTrades = res.trades
         allTrades = TradeSerializer(allTrades, many=True)
+        if res.pfp_id != "False":
+            res.pfp_id = getSignedUrl(res.pfp_id)
         serializer = UserSerializer(res, many=False)
         currencyData = getHistoricalCurrencyPrice(res.curr_currency)
         res = Response()
@@ -68,8 +77,6 @@ def register(request):
         return res
     return Response({'body': res, 'errors': True}, status=400)
 
-
-#  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksImV4cCI6MTY3NTkwOTAxMywiaWF0IjoxNjczMzE3MDEzfQ.UVFwTz8jzIuQ3ZSxZXgkO4-7IptKI35SCBL6JfaAulY
 
 
 @api_view(['POST'])
@@ -91,7 +98,10 @@ def login(request):
     }
     userToken = jwt.encode(payload, env('APP_SECRET_KEY'), algorithm='HS256')
     allTrades = res.trades
+
     allTrades = TradeSerializer(allTrades, many=True)
+    if res.pfp_id != "False":
+        res.pfp_id = getSignedUrl(res.pfp_id)
     serializer = UserSerializer(res)
     currencyData = getHistoricalCurrencyPrice(res.curr_currency)
     res = Response()
@@ -123,6 +133,8 @@ def getLoggedUser(request):
     user = User.objects.filter(id=payload['id']).first()
     if user is None:
         return Response('Unauthenticated token!', status=401)
+    if user.pfp_id != "False":
+        user.pfp_id = getSignedUrl(user.pfp_id)
     currencyData = getHistoricalCurrencyPrice(user.curr_currency)
     serializer = UserSerializer(user)
     allTrades = user.trades
@@ -139,12 +151,18 @@ def getLoggedUser(request):
     return res
 
 
+@api_view(["GET"])
+def checkIfEmailTaken(request):
+    return Response(
+        User.objects.checkIfEmailIsTaken(request.query_params.get('email')))
+
+
 @api_view(['POST'])
 def logout(request):
     print('Logout')
     # res = Response()
     # res.delete_cookie('userToken')
-    # return res
+    # return res\
     res = HttpResponse()
     res.delete_cookie(key='userToken')
     res.data = {

@@ -8,9 +8,9 @@ import axios from 'axios';
 import { generateRandomFloat } from '../utils/callAbleFuncs'
 
 const TradeChart = (props) => {
-	// TODO add currrecny PAir to context
 	const { currencyPairPrices, setCurrencyPairPrices } = useContext(CurrencyContext)
 	const { loggedUser, setLoggedUser } = useContext(UserContext)
+	const [currPrice, setCurrPrice] = useState(null)
 	const [chartData, setChartData] = useState({
 		series: [
 			{
@@ -97,7 +97,6 @@ const TradeChart = (props) => {
 					show: true,
 					align: 'right',
 					minWidth: 0,
-					// maxWidth: 160,
 					style: {
 						colors: ["white"],
 						fontSize: '.7em',
@@ -105,19 +104,16 @@ const TradeChart = (props) => {
 						fontWeight: 400,
 						cssClass: 'apexcharts-yaxis-label',
 					},
-					// offsetX: 0,
-					// offsetY: 0,
-					// rotate: 0,
 				},
 			},
 			xaxis: {
-				range: 1000000000, //this made the graph zoom better
+				range: 100000, //this made the graph zoom better
 				type: 'datetime',
 				labels: {
 					show: true,
 					align: 'right',
 					style: {
-						colors: ["white"],
+						colors: "white",
 						fontSize: '.7em',
 						fontWeight: 400,
 						cssClass: 'apexcharts-yaxis-label',
@@ -126,8 +122,8 @@ const TradeChart = (props) => {
 			},
 		}
 	})
+
 	useEffect(() => {
-		// console.log('here changing charts data')
 		setChartData({
 			...chartData, series: [
 				{
@@ -136,51 +132,34 @@ const TradeChart = (props) => {
 				},
 			],
 		})
-	}, [currencyPairPrices]);
+		setCurrPrice(currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1])
+	}, [currencyPairPrices, loggedUser.curr_currency]);
+
 	useEffect(() => {
-		let interval
-		interval = setInterval(() => {
-			const today = new Date();
-			const date = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + today.getDate();
-			let time = ('0' + today.getHours()).slice(-2) + ':' + ('0' + today.getMinutes()).slice(-2) + ':' + ('0' + today.getSeconds()).slice(-2);
-			// console.log(date + ' ' + time)
-			let copy = { ...currencyPairPrices }
-			copy.rates.push([date + ' ' + time, currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1] + generateRandomFloat(-.05, .05)])
-			setCurrencyPairPrices(copy)
-			// setCurrencyPairPrices({
-			// 	...currencyPairPrices, rates: [...currencyPairPrices.rates,
-			// 	[date + ' ' + time, currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1] + generateRandomFloat(-.05, .05)]]
-			// 	// ['2023-01-15 11:45:48', currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1] + generateRandomFloat(-.1, .1)]]
-			// })
+		let interval = setInterval(() => {
+			if (currPrice !== null) {
+				const today = new Date();
+				const date = today.getFullYear() + '-' + ('0' + today.getMonth() + 1).slice(-2) + '-' + today.getDate();
+				let time = ('0' + today.getHours()).slice(-2) + ':' + ('0' + today.getMinutes()).slice(-2) + ':' + ('0' + today.getSeconds()).slice(-2);
+				let newCurrentPrice = currPrice + generateRandomFloat(-.05, .05)
+				setCurrencyPairPrices({
+					...currencyPairPrices, rates: [...currencyPairPrices.rates,
+					[date + ' ' + time, newCurrentPrice]]
+					// ['2023-01-15 11:45:48', currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1] + generateRandomFloat(-.1, .1)]]
+				})
+				setCurrPrice(newCurrentPrice)
+			}
 		}, 3000);
-		let time_out = setTimeout(() => {
-			setChartData({
-				...chartData,
-				options: {
-					...chartData.options,
-					xaxis: {
-						...chartData.options.xaxis,
-						range: 100000
-					}
-				}
-			})
-		}, 7000)
 		return () => {
 			clearInterval(interval)
-			clearTimeout(time_out)
-			// clearTimeout(timeOutChangeZoomLevel)
 		};
-	}, []);
-	// TODO 
-	// make the size of the chart different zoom size depending on the currency pair
-	// make sure the preditction and profit id correct
-	// edit the all trades data after retrieving the profit
+	}, [currPrice, currencyPairPrices]);
 
 	const changeCurrencyPair = (pair) => {
 		axios.get(`http://localhost:8000/api/trades/getCurrencyPairPrice?pair=${pair}&id=${loggedUser.id}`)
 			.then(res => {
 				console.log(res)
-				setLoggedUser({ ...loggedUser, currCurrency: pair })
+				setLoggedUser({ ...loggedUser, curr_currency: pair })
 				setCurrencyPairPrices(res.data.body.currencyData)
 			})
 			.catch(err => {
@@ -188,7 +167,6 @@ const TradeChart = (props) => {
 			})
 	}
 	// console.log('!!! rerendering trading chart !!!')
-
 
 
 	return (
@@ -203,7 +181,7 @@ const TradeChart = (props) => {
 					<li className='currCurrency'>
 						{loggedUser.curr_currency}
 						{/* set a time count down until next min api call above this */}
-						<p>current price: ${parseFloat(currencyPairPrices.rates[currencyPairPrices.rates.length - 1][1]).toFixed(2)}</p>
+						<p>current price: ${parseFloat(currPrice).toFixed(2)}</p>
 						{arrowSelector}
 					</li>
 					<div>
@@ -214,12 +192,10 @@ const TradeChart = (props) => {
 						<li onClick={() => changeCurrencyPair('NZD/USD')}>NZD/USD</li>
 						<li onClick={() => changeCurrencyPair('AUD/USD')}>AUD/USD</li>
 						<li onClick={() => changeCurrencyPair('USD/CAD')}>USD/CAD</li>
-						<li onClick={() => changeCurrencyPair('USD/JPY')}>USD/JPY</li>
 						<li onClick={() => changeCurrencyPair('EUR/CAD')}>EUR/CAD</li>
 						<li onClick={() => changeCurrencyPair('GBP/EUR')}>GBP/EUR</li>
 						<li onClick={() => changeCurrencyPair('EUR/CHF')}>EUR/CHF</li>
 						<li onClick={() => changeCurrencyPair('EUR/AUD')}>EUR/AUD</li>
-						<li onClick={() => changeCurrencyPair('EUR/JPY')}>EUR/JPY</li>
 					</div>
 				</ul>
 			</div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { useNavigate } from "react-router-dom";
 import '../styles/dashboard.css'
 import '../styles/nav.css'
@@ -11,11 +11,13 @@ import axios from 'axios';
 import { CurrencyContext } from '../context/CurrencyContext';
 import { AllTradesContext } from '../context/AllTradesContext';
 import AboutProjectPopUp from './popUps/AboutProjectPopUp'
+import PastTradesPopUp from './popUps/PastTradesPopUp'
+import { no_user_pfp } from '../miscellaneous/svgIcons'
 
 const Dashboard = () => {
     const { currencyPairPrices, setCurrencyPairPrices } = useContext(CurrencyContext)
     const { allTrades, setAllTrades } = useContext(AllTradesContext)
-
+    const [displayPastTrades, setDisplayPastTrades] = useState(false)
     const redirect = useNavigate()
     const { loggedUser, setLoggedUser } = useContext(UserContext)
     useEffect(() => {
@@ -23,7 +25,7 @@ const Dashboard = () => {
             console.log('rendering dashboard useEffect to get user with local storage')
             axios.get('http://localhost:8000/api/users/getLoggedUser/', { withCredentials: true })
                 .then(res => {
-                    console.log('logged user from token', res.data)
+                    console.log('logged user from token', res.data.body)
                     setLoggedUser(res.data.body.user)
                     setCurrencyPairPrices(res.data.body.currencyData)
                     setAllTrades(res.data.body.allTrades)
@@ -43,6 +45,7 @@ const Dashboard = () => {
         axios.post('http://localhost:8000/api/users/logout/', { withCredentials: true })
             .then(res => {
                 console.log(res.data, 'logged out')
+                setLoggedUser(null)
                 redirect('/landing_page')
             })
             .catch(err => console.log(err))
@@ -57,16 +60,42 @@ const Dashboard = () => {
                 console.error(err)
             })
     }
+    const closePastTradesCont = () => {
+        setDisplayPastTrades(false)
+    }
+    const useCheckClickOutside = (handler) => {
+        let domRef = useRef()
+        useEffect(() => {
+            if (domRef.current !== undefined) {
+                let checkHandler = (e) => {
+                    if (!domRef.current.contains(e.target)) {
+                        handler()
+                    }
+                }
+                document.addEventListener("mousedown", checkHandler)
+                return () => {
+                    document.removeEventListener("mousedown", checkHandler)
+                }
+            }
+        });
+        return domRef
+    }
     return (
         <div id='dash__cont'>
             <nav>
                 <ul>
                     <li>
-                        <img id='pfp' src={img} alt="" />
+                        {
+                            loggedUser ?
+                                loggedUser.pfp_id === "False" ?
+                                    no_user_pfp
+                                    :
+                                    <img id='pfp' src={loggedUser.pfp_id} alt="" />
+                                : no_user_pfp
+                        }
                     </li>
                     <li>
-                        {/* TODO past trades page */}
-                        <button>
+                        <button onClick={(e) => setDisplayPastTrades(true)}>
                             {pastTradesSvg}
                             <span>view past trades</span>
                         </button>
@@ -95,10 +124,10 @@ const Dashboard = () => {
                     loggedUser ? <TradingPanel /> : null
                 }
             </div>
-            {loggedUser ? <AboutProjectPopUp /> : null}
-            {/* TODO make sure this is only shown once when the user first
-             creates account set a varible in the model to newUser and set
-              it defult to true */}
+            <AboutProjectPopUp />
+            {displayPastTrades ?
+                <PastTradesPopUp closePastTradesCont={closePastTradesCont} useCheckClickOutside={useCheckClickOutside} />
+                : null}
         </div>
     )
 }

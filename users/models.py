@@ -64,22 +64,25 @@ class UserManager(models.Manager):
             return (False, 'Invalid credentials')
         return (True, checkEmailDb)
 
+    def checkIfEmailIsTaken(self, email):
+        checkEmailDb = User.objects.filter(email=email).first()
+        if checkEmailDb is None:
+            return (False, 'email available!')
+        return (True, 'email taken!')
 
 class User(models.Model):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     email = models.CharField(max_length=255)
     pw_hash = models.CharField(max_length=500)
-    pfp_id = models.CharField(
-        default=False,
-        max_length=500,
-    )
+    pfp_id = models.CharField(max_length=500)
     curr_currency = models.CharField(max_length=12, default='EUR/USD')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     age = models.PositiveIntegerField()
     balance = models.FloatField(default=15000)
-    test =models.PositiveIntegerField(default=15000)
+    test = models.PositiveIntegerField(default=15000)
+    isNewUser = models.BooleanField(default=1)
     objects = UserManager()
 
     # override default method so we can see more info from the user in the terminal

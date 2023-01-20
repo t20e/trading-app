@@ -98,3 +98,30 @@
 .noPfpSvg2 {
     fill: #a2a2a2;
 }
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.loadingSvg {
+    fill: none;
+    stroke: #B3DEC1;
+    transform-origin: center;
+    stroke-width: 30;
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+    animation: spin 1s linear infinite;
+}
+
+
+
+.checkMarkSvg {
+    fill: none;
+    stroke: #B3DEC1;
+    stroke-width: 30;
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+}

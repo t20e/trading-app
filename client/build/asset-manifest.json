@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.15cb7795.css",
+    "main.js": "/static/js/main.16cbbc36.js",
+    "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
+    "static/media/corgie-02.png": "/static/media/corgie-02.d8daf09d22ffc73b9d05.png",
+    "static/media/btnClickAudio.mp3": "/static/media/btnClickAudio.b6ba29659cf55d571cc0.mp3",
+    "static/media/lighting-08.svg": "/static/media/lighting-08.ba55f53f17e2bd1886934d1c7074fb2a.svg",
+    "index.html": "/index.html",
+    "main.15cb7795.css.map": "/static/css/main.15cb7795.css.map",
+    "main.16cbbc36.js.map": "/static/js/main.16cbbc36.js.map",
+    "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.15cb7795.css",
+    "static/js/main.16cbbc36.js"
+  ]
+}
